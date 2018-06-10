@@ -1,6 +1,6 @@
-package com.example.demo;
+package com.example.user;
 
-import com.example.demo.model.User;
+import com.example.DemoApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Assert;

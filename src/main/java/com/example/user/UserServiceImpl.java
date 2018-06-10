@@ -1,7 +1,5 @@
-package com.example.demo.service;
+package com.example.user;
 
-import com.example.demo.dao.UserRepository;
-import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
