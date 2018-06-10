@@ -47,7 +47,6 @@ public class UserController {
         }
         return ResponseEntity.ok(userById);
     }
-
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> getUser() {
         List<User> users = userService.listUser();
