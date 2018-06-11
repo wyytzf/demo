@@ -1,6 +1,8 @@
 spring:
+  profiles:
+    active: dev
   datasource:
-    url: jdbc:mysql://localhost/user?autoReconnect=true&useSSL=false
+    url: jdbc:mysql://localhost/demo?autoReconnect=true&useSSL=false
     username: root
     password: wyy58023515
     driver-class-name: com.mysql.jdbc.Driver

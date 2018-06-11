@@ -21,7 +21,14 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
-
+sourceSets{
+    apiTest{
+        java
+        resources
+        compileClasspath += sourceSets.test.runtimeClasspath
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    }
+}
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter')
