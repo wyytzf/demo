@@ -10,11 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,12 +35,12 @@ public class UserControllerTest {
     public void testUserControllerPost() {
 
         User user = new User();
-        user.setAccount("test_post");
-        user.setAge(18);
-        user.setPassword("test_post");
-        user.setName("test_post");
+//        user.setAccount("test_post");
+//        user.setAge(18);
+//        user.setPassword("test_post");
+//        user.setRealname("test_post");
 
-        ResponseEntity<User> entity = testRestTemplate.postForEntity("http://localhost:8080/user", user, User.class);
+        ResponseEntity<User> entity = testRestTemplate.postForEntity("http://localhost:8080/order", user, User.class);
         HttpStatus statusCode = entity.getStatusCode();
         Assert.assertEquals(201, statusCode.value());
 
@@ -51,25 +48,25 @@ public class UserControllerTest {
 
     @Test
     public void testUserControllerGet() throws Exception {
-        ResponseEntity<List> entity = testRestTemplate.getForEntity("http://localhost:8080/user", List.class);
+        ResponseEntity<List> entity = testRestTemplate.getForEntity("http://localhost:8080/order", List.class);
         HttpStatus statusCode = entity.getStatusCode();
         List body = entity.getBody();
 
 
         List<User> ex_list = new ArrayList<>();
         User user1 = new User();
-        user1.setId(1L);
-        user1.setAccount("test1");
-        user1.setAge(18);
-        user1.setPassword("test1");
-        user1.setName("test1");
+//        user1.setId(1L);
+//        user1.setAccount("test1");
+//        user1.setAge(18);
+//        user1.setPassword("test1");
+//        user1.setRealname("test1");
 
         User user2 = new User();
-        user2.setId(2L);
-        user2.setAccount("test2");
-        user2.setAge(15);
-        user2.setPassword("test2");
-        user2.setName("test2");
+//        user2.setId(2L);
+//        user2.setAccount("test2");
+//        user2.setAge(15);
+//        user2.setPassword("test2");
+//        user2.setRealname("test2");
 
         ex_list.add(user1);
         ex_list.add(user2);
@@ -81,7 +78,7 @@ public class UserControllerTest {
         Assert.assertEquals(200, statusCode.value());
         Assert.assertEquals(exceptJson, actualJson);
 
-        ResponseEntity<User> userEntity = testRestTemplate.getForEntity("http://localhost:8080/user/{id}", User.class, 1);
+        ResponseEntity<User> userEntity = testRestTemplate.getForEntity("http://localhost:8080/order/{id}", User.class, 1);
         HttpStatus statusCode1 = userEntity.getStatusCode();
         User body1 = userEntity.getBody();
 
@@ -97,7 +94,7 @@ public class UserControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-        ResponseEntity<String> result = testRestTemplate.exchange("http://localhost:8080/user/4", HttpMethod.DELETE, entity, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange("http://localhost:8080/order/4", HttpMethod.DELETE, entity, String.class);
         HttpStatus statusCode = result.getStatusCode();
         Assert.assertEquals(204, statusCode.value());
 
@@ -107,17 +104,17 @@ public class UserControllerTest {
     @Test
     public void testUserControllerPut() throws Exception {
         User user = new User();
-        user.setId(1L);
-        user.setAccount("test1");
-        user.setAge(28);
-        user.setPassword("test1");
-        user.setName("test1");
+//        user.setId(1L);
+//        user.setAccount("test1");
+//        user.setAge(28);
+//        user.setPassword("test1");
+//        user.setRealname("test1");
 
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<User> entity = new HttpEntity<User>(user, headers);
-        ResponseEntity<String> result = testRestTemplate.exchange("http://localhost:8080/user", HttpMethod.PUT, entity, String.class, user);
+        ResponseEntity<String> result = testRestTemplate.exchange("http://localhost:8080/order", HttpMethod.PUT, entity, String.class, user);
 
         HttpStatus statusCode = result.getStatusCode();
         Assert.assertEquals(204, statusCode.value());

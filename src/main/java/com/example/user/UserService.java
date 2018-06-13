@@ -1,6 +1,5 @@
 package com.example.user;
 
-import com.example.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +13,8 @@ public interface UserService {
     void deleteUser(Long id);
 
     User getUser(Long id);
+
+    User getUserByAccount(String account);
 
     List<User> listUser();
 }

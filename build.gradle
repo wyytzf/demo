@@ -21,14 +21,26 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
-sourceSets{
-    apiTest{
+sourceSets {
+    apiTest {
         java
         resources
         compileClasspath += sourceSets.test.runtimeClasspath
         runtimeClasspath += sourceSets.test.runtimeClasspath
     }
 }
+
+task apiTest(type: Test) {
+    testClassesDir = sourceSets.apiTest.output.classesDir
+    classpath = sourceSets.apiTest.runtimeClasspath
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.8'
+}
+
+apiTest.mustRunAfter test
+build.dependsOn apiTest
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter')

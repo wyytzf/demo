@@ -1,4 +1,4 @@
-package com.example.user;
+package com.example.order;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
