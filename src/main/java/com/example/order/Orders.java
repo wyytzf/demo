@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Order implements Serializable {
-
+public class Orders implements Serializable {
+    private static final long serialVersionUID = 4L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,10 +22,10 @@ public class Order implements Serializable {
     private Goods goods;
     @Column(nullable = false, name = "number")
     private int number;
-    @Column(nullable = false, name = "deal_date")
-    private Date deal_date;
+    @Column(nullable = false, name = "dealdate")
+    private Date dealdate;
 
-    public Order() {
+    public Orders() {
 
     }
 
@@ -45,8 +45,8 @@ public class Order implements Serializable {
         this.number = number;
     }
 
-    public void setDeal_date(Date deal_date) {
-        this.deal_date = deal_date;
+    public void setDealdate(Date dealdate) {
+        this.dealdate = dealdate;
     }
 
     public Long getId() {
@@ -65,7 +65,7 @@ public class Order implements Serializable {
         return number;
     }
 
-    public Date getDeal_date() {
-        return deal_date;
+    public Date getDealdate() {
+        return dealdate;
     }
 }

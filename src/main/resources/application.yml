@@ -8,5 +8,5 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     show-sql: true
-flyway:
-  baselineOnMigrate: true
+  flyway:
+    baseline-on-migrate: true

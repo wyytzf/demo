@@ -1,6 +1,6 @@
 package com.example.goods;
 
-import com.example.order.Order;
+import com.example.order.Orders;
 import com.example.producer.Producer;
 
 import javax.persistence.*;
@@ -26,7 +26,7 @@ public class Goods implements Serializable {
     private Producer producer;
 
     @OneToMany(mappedBy = "goods")
-    private List<Order> orders;
+    private List<Orders> orders;
 
     public Goods() {
 

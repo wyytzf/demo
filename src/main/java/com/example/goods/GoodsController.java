@@ -4,6 +4,8 @@ package com.example.goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/goods")
 public class GoodsController {
@@ -34,5 +36,9 @@ public class GoodsController {
         return goodsService.getGoods(id);
     }
 
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Goods> getGoods() {
+        return goodsService.listGoods();
+    }
 
 }

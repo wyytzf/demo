@@ -1,12 +1,10 @@
 package com.example.user;
 
-import com.example.order.Order;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
@@ -21,15 +19,16 @@ public class User implements Serializable {
     private String password;
     @Column(nullable = false, name = "realname")
     private String realname;
-    @Column(nullable = false, name = "eMail")
-    private String eMail;
+    @Column(nullable = false, name = "email")
+    private String email;
     @Column(nullable = false, name = "phone")
     private String phone;
-    @Column(nullable = false, name = "date")
-    private Date date;
+    @Column(nullable = false, name = "registertime")
+    private Date registertime;
 
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
+//    @OneToMany(cascade = CascadeType.MERGE)
+////    @JoinColumn(name = "uid")
+////    private List<Orders> orders;
 
     public User() {
 
@@ -52,28 +51,28 @@ public class User implements Serializable {
         return id;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getRegistertime() {
+        return registertime;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setRegistertime(Date registertime) {
+        this.registertime = registertime;
     }
 
     public void setAccount(String account) {
@@ -92,4 +91,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
+//    public void setOrders(List<Orders> orders) {
+//        this.orders = orders;
+//    }
+//
+//    public List<Orders> getOrders() {
+//        return orders;
+//    }
 }

@@ -1,8 +1,5 @@
 package com.example.Interceptor;
 
-import com.example.token.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

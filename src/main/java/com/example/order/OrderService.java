@@ -1,21 +1,25 @@
 package com.example.order;
 
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 public interface OrderService {
-    void addOrder(Order order);
+    void addOrder(Orders order);
 
     void deleteOrder(Long id);
 
-    void updateOrder(Order order);
+    void updateOrder(Orders order);
 
-    Order getOrder(Long id);
+    Orders getOrder(Long id);
 
-    List<Order> getListByUser(Long uid);
+    List<Orders> getListByUser(Long uid);
 
-    List<Order> getListByGoods(Long gid);
+    List<Orders> getListByGoods(Long gid);
+
+    List<Orders> getListByUserBetweenDate(Long uid, Date begin, Date end);
+
+    List<Orders> getListByGoodsBetweenDate(Long gid, Date begin, Date end);
 }

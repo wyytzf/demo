@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/user")
 public class UserController {
 
     private UserService userService;
@@ -45,6 +45,7 @@ public class UserController {
         }
         return ResponseEntity.ok(userById);
     }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> getUser() {
         List<User> users = userService.listUser();
