@@ -23,6 +23,7 @@ public class OrderController {
         return orderService.getListByUser(uid);
     }
     //
+    //
     @RequestMapping(value = "/goods/{gid}", method = RequestMethod.GET)
     public List<Orders> getOrderListByProducer(@PathVariable Long gid) {
         return orderService.getListByGoods(gid);
