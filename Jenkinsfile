@@ -1,4 +1,5 @@
 node {
+    checkout scm
     stage('Build') {
         bat 'gradle test'
     }
