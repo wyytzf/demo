@@ -1,9 +1,14 @@
 package com.example.user;
 
+import com.example.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,4 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByAccount(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("UsernameNotFoundException");
+        } else {
+            return new SecurityUser(user.getAccount(), user.getPassword(), user.getRoles().stream().map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+        }
+
+    }
 }

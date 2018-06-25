@@ -2,6 +2,7 @@ package com.example.goods;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,21 +18,25 @@ public class GoodsController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public void addGoods(@RequestBody Goods goods) {
         goodsService.saveGoods(goods);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public void deleteGoods(@PathVariable Long id) {
         goodsService.deleteGoods(id);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public void updateGoods(@RequestBody Goods goods) {
         goodsService.updateGoods(goods);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public Goods getGoods(@PathVariable Long id) {
         return goodsService.getGoods(id);
     }

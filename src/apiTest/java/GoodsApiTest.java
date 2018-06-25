@@ -14,6 +14,5 @@ public class GoodsApiTest {
 
     @Before
     public void setUp(){
-
     }
 }

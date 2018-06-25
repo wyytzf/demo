@@ -1,10 +1,13 @@
 package com.example.user;
 
+import com.example.role.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
@@ -26,14 +29,15 @@ public class User implements Serializable {
     @Column(nullable = false, name = "registertime")
     private Date registertime;
 
-//    @OneToMany(cascade = CascadeType.MERGE)
-////    @JoinColumn(name = "uid")
-////    private List<Orders> orders;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "userinrole", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "id")}
+            , inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "id")})
+    @JsonIgnore
+    private List<Role> roles;
 
     public User() {
 
     }
-
 
     public String getAccount() {
         return account;
@@ -61,6 +65,14 @@ public class User implements Serializable {
 
     public Date getRegistertime() {
         return registertime;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
     }
 
     public void setEmail(String email) {
@@ -91,11 +103,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-//    public void setOrders(List<Orders> orders) {
-//        this.orders = orders;
-//    }
-//
-//    public List<Orders> getOrders() {
-//        return orders;
-//    }
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 }

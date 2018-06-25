@@ -3,6 +3,7 @@ package com.example.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,23 +21,27 @@ public class UserController {
 
 
     @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<Void> addUser(@RequestBody User user) {
         userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<Void> updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         User userById = userService.getUser(id);
@@ -46,7 +51,9 @@ public class UserController {
         return ResponseEntity.ok(userById);
     }
 
+    // 数据库里需要定义成ROLE_USER
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<List<User>> getUser() {
         List<User> users = userService.listUser();
         if (users == null) {
