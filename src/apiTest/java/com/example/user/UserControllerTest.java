@@ -1,8 +1,8 @@
 package com.example.user;
 
 import com.example.BaseApiTest;
-import com.example.role.Role;
-import com.example.utils.JwtTokenUtil;
+import com.example.security.JwtTokenService;
+import com.example.security.Role;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Before;
@@ -24,7 +24,7 @@ public class UserControllerTest extends BaseApiTest {
 
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtTokenService jwtTokenService;
     @Autowired
     private UserService userService;
     private User acuser = new User();
@@ -49,8 +49,8 @@ public class UserControllerTest extends BaseApiTest {
         acuser.setRoles(list);
         UserDetails userDetails_u1 = userService.loadUserByUsername("u1");
         UserDetails userDetails_u2 = userService.loadUserByUsername("u2");
-        u1_user_token = jwtTokenUtil.generateToken(userDetails_u1);
-        u2_admin_token = jwtTokenUtil.generateToken(userDetails_u2);
+        u1_user_token = jwtTokenService.generateToken(userDetails_u1);
+        u2_admin_token = jwtTokenService.generateToken(userDetails_u2);
         mapper = new ObjectMapper();
         ow = mapper.writer().withDefaultPrettyPrinter();
     }

@@ -1,6 +1,6 @@
 package com.example.user;
 
-import com.example.role.Role;
+import com.example.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

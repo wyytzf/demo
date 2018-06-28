@@ -1,8 +1,7 @@
-package com.example.token;
+package com.example.security;
 
 
 import com.example.user.UserService;
-import com.example.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,13 +19,13 @@ public class TokenController {
 
     private AuthenticationManager authenticationManager;
     private UserService userService;
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtTokenService jwtTokenService;
 
     @Autowired
-    public TokenController(AuthenticationManager authenticationManager, UserService userService, JwtTokenUtil jwtTokenUtil) {
+    public TokenController(AuthenticationManager authenticationManager, UserService userService, JwtTokenService jwtTokenService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
-        this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtTokenService = jwtTokenService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -35,7 +34,7 @@ public class TokenController {
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = userService.loadUserByUsername(account);
-        return jwtTokenUtil.generateToken(userDetails);
+        return jwtTokenService.generateToken(userDetails);
     }
 
 

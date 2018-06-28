@@ -1,8 +1,6 @@
-package com.example.config;
+package com.example.security;
 
-import com.example.Filter.TokenFilter;
 import com.example.user.UserService;
-import com.example.utils.MyPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
