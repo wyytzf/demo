@@ -1,11 +1,8 @@
 spring:
-  #  使用dev配置
-  profiles:
-    active: dev
   datasource:
     url: jdbc:mysql://localhost/demo?autoReconnect=true&useSSL=false
     username: root
-    password: wyy58023515
+    password:
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     show-sql: true
