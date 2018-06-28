@@ -106,4 +106,16 @@ public class User implements Serializable {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (obj instanceof User) {
+            User user = (User) obj;
+            return account.equals(user.getAccount());
+        }
+        return false;
+    }
+
 }

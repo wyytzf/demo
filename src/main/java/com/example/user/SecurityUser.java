@@ -7,11 +7,14 @@ import java.util.Collection;
 
 public class SecurityUser implements UserDetails {
 
+    private long id;
     private String account;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public SecurityUser(String account, String password, Collection<? extends GrantedAuthority> authorities) {
+
+    public SecurityUser(long id, String account, String password, Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
         this.account = account;
         this.password = password;
         this.authorities = authorities;
@@ -30,6 +33,10 @@ public class SecurityUser implements UserDetails {
     @Override
     public String getUsername() {
         return this.account;
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override

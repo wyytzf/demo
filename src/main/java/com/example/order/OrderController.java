@@ -1,6 +1,7 @@
 package com.example.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,14 +19,17 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @RequestMapping(value = "/user/{uid}", method = RequestMethod.GET)
-    public List<Orders> getOrderListByUser(@PathVariable Long uid) {
-        return orderService.getListByUser(uid);
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @PreAuthorize(value = "hasRole('ADMIN')")
+    public Orders getOrderById(@PathVariable long id) {
+        return orderService.getOrder(id);
     }
 
-    @RequestMapping(value = "/goods/{gid}", method = RequestMethod.GET)
-    public List<Orders> getOrderListByProducer(@PathVariable Long gid) {
-        return orderService.getListByGoods(gid);
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    @PreAuthorize(value = "hasRole('ADMIN')")
+    public List<Orders> getOrderByUserId(@PathVariable long id) {
+        return orderService.getListByUser(id);
     }
 
 }

@@ -21,8 +21,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public long saveUser(User user) {
+        User save = userRepository.save(user);
+        return save.getId();
     }
 
     @Override
@@ -57,7 +58,8 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UsernameNotFoundException("UsernameNotFoundException");
         } else {
-            return new SecurityUser(user.getAccount(), user.getPassword(), user.getRoles().stream().map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+            return new SecurityUser(user.getId(), user.getAccount(), user.getPassword(), user.getRoles().
+                    stream().map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
         }
 
     }

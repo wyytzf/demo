@@ -1,6 +1,8 @@
-
 import com.example.DemoApplication;
+import com.example.role.Role;
 import com.example.user.User;
+import com.example.user.UserService;
+import com.example.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Assert;
@@ -10,11 +12,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,100 +33,105 @@ public class UserControllerTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private UserService userService;
+    private User acuser = new User();
+    private String u1_user_token;
+    private String u2_admin_token;
+    private ObjectMapper mapper;
+    private ObjectWriter ow;
+    private long current_id;
 
     @Before
-    public void setUp(){
+    public void setUp() {
+        acuser.setAccount("test_post");
+        acuser.setPassword("test_post");
+        acuser.setRealname("test_post");
+        acuser.setEmail("test_post");
+        acuser.setPhone("test_post");
+        acuser.setRegistertime(new Date());
 
+        Role role = new Role();
+        role.setName("ROLE_USER");
+        List<Role> list = new ArrayList<>();
+        list.add(role);
+        acuser.setRoles(list);
+        UserDetails userDetails_u1 = userService.loadUserByUsername("u1");
+        UserDetails userDetails_u2 = userService.loadUserByUsername("u2");
+        u1_user_token = jwtTokenUtil.generateToken(userDetails_u1);
+        u2_admin_token = jwtTokenUtil.generateToken(userDetails_u2);
+        mapper = new ObjectMapper();
+        ow = mapper.writer().withDefaultPrettyPrinter();
     }
 
     @Test
-    public void testUserControllerPost() {
+    public void testAddUser() throws URISyntaxException {
 
-        User user = new User();
-//        user.setAccount("test_post");
-//        user.setAge(18);
-//        user.setPassword("test_post");
-//        user.setRealname("test_post");
+        RequestEntity<User> requestEntity = RequestEntity
+                .post(new URI("http://localhost:8080/user"))
+                .header("Authorization", "Bearer " + u1_user_token)
+                .body(acuser);
 
-        ResponseEntity<User> entity = testRestTemplate.postForEntity("http://localhost:8080/order", user, User.class);
+        ResponseEntity<Long> entity = testRestTemplate.postForEntity("http://localhost:8080/user", requestEntity, Long.class);
         HttpStatus statusCode = entity.getStatusCode();
+        current_id = entity.getBody();
         Assert.assertEquals(201, statusCode.value());
-
     }
 
     @Test
-    public void testUserControllerGet() throws Exception {
-        ResponseEntity<List> entity = testRestTemplate.getForEntity("http://localhost:8080/order", List.class);
-        HttpStatus statusCode = entity.getStatusCode();
+    public void testGetUser() throws Exception {
+        /// 所有
+        RequestEntity requestEntity = RequestEntity
+                .get(new URI("http://localhost:8080/user")).accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + u2_admin_token).build();
+
+        ResponseEntity<List> entity = testRestTemplate.exchange(requestEntity, List.class);
         List body = entity.getBody();
-
-
-        List<User> ex_list = new ArrayList<>();
-        User user1 = new User();
-//        user1.setId(1L);
-//        user1.setAccount("test1");
-//        user1.setAge(18);
-//        user1.setPassword("test1");
-//        user1.setRealname("test1");
-
-        User user2 = new User();
-//        user2.setId(2L);
-//        user2.setAccount("test2");
-//        user2.setAge(15);
-//        user2.setPassword("test2");
-//        user2.setRealname("test2");
-
-        ex_list.add(user1);
-        ex_list.add(user2);
-
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String exceptJson = ow.writeValueAsString(ex_list);
-        String actualJson = ow.writeValueAsString(body);
-        Assert.assertEquals(200, statusCode.value());
-        Assert.assertEquals(exceptJson, actualJson);
-
-        ResponseEntity<User> userEntity = testRestTemplate.getForEntity("http://localhost:8080/order/{id}", User.class, 1);
-        HttpStatus statusCode1 = userEntity.getStatusCode();
-        User body1 = userEntity.getBody();
-
-        exceptJson = ow.writeValueAsString(user1);
-        actualJson = ow.writeValueAsString(body1);
-
-        Assert.assertEquals(200, statusCode1.value());
-        Assert.assertEquals(exceptJson, actualJson);
+        Assert.assertEquals(body.size(), 4);
+        /// 某个
+        requestEntity = RequestEntity.get(new URI("http://localhost:8080/user/" + current_id))
+                .accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + u2_admin_token)
+                .build();
+        ResponseEntity<User> r1 = testRestTemplate.exchange(requestEntity, User.class);
+        User user = r1.getBody();
+        Assert.assertEquals(acuser.getAccount(), user.getAccount());
     }
 
     @Test
-    public void testUserControllerDelete() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-        ResponseEntity<String> result = testRestTemplate.exchange("http://localhost:8080/order/4", HttpMethod.DELETE, entity, String.class);
+    public void testUpdateUser() throws Exception {
+        acuser.setId(current_id);
+        acuser.setPassword("test_put");
+        acuser.setRealname("test_put");
+        RequestEntity requestEntity = RequestEntity
+                .put(new URI("http://localhost:8080/user")).accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + u1_user_token).body(acuser);
+        ResponseEntity<String> result = testRestTemplate.exchange(requestEntity, String.class);
         HttpStatus statusCode = result.getStatusCode();
         Assert.assertEquals(204, statusCode.value());
-
-
     }
 
     @Test
-    public void testUserControllerPut() throws Exception {
-        User user = new User();
-//        user.setId(1L);
-//        user.setAccount("test1");
-//        user.setAge(28);
-//        user.setPassword("test1");
-//        user.setRealname("test1");
+    public void testDeleteUser() throws Exception {
+        RequestEntity requestEntity = RequestEntity
+                .delete(new URI("http://localhost:8080/user/" + current_id)).accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + u2_admin_token).build();
 
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<User> entity = new HttpEntity<User>(user, headers);
-        ResponseEntity<String> result = testRestTemplate.exchange("http://localhost:8080/order", HttpMethod.PUT, entity, String.class, user);
-
+        ResponseEntity<String> result = testRestTemplate.exchange(requestEntity, String.class);
         HttpStatus statusCode = result.getStatusCode();
         Assert.assertEquals(204, statusCode.value());
+    }
 
+    @Test
+    public void testGetOrders() throws Exception {
+        RequestEntity requestEntity = RequestEntity
+                .get(new URI("http://localhost:8080/user/orders")).accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + u1_user_token).build();
+
+        ResponseEntity<String> result = testRestTemplate.exchange(requestEntity, String.class);
+        HttpStatus statusCode = result.getStatusCode();
+        String body = result.getBody();
     }
 
 

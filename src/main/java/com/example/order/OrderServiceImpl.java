@@ -1,9 +1,10 @@
 package com.example.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,8 +19,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addOrder(Orders order) {
-        orderRepository.save(order);
+    public boolean addOrder(Orders order) {
+        Orders save = orderRepository.save(order);
+        return save != null;
     }
 
     @Override
@@ -28,8 +30,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrder(Orders order) {
-        orderRepository.save(order);
+    public boolean updateOrder(Orders order) {
+        Orders save = orderRepository.save(order);
+        return save != null;
     }
 
     @Override
@@ -39,22 +42,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Orders> getListByUser(Long uid) {
-        return orderRepository.findOrdersByUser(uid);
+        return orderRepository.findOrdersByUserId(uid);
     }
 
     @Override
-    public List<Orders> getListByGoods(Long gid) {
-        return orderRepository.findOrdersByGoods(gid);
+    public Page<Orders> getListByUser(Long id, Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
-
-    @Override
-    public List<Orders> getListByUserBetweenDate(Long uid, Date begin, Date end) {
-        return orderRepository.findOrdersByUserAndDealdateBetween(uid, begin, end);
-    }
-
-    @Override
-    public List<Orders> getListByGoodsBetweenDate(Long gid, Date begin, Date end) {
-        return orderRepository.findOrdersByGoodsAndDealdateBetween(gid, begin, end);
-    }
-
 }

@@ -1,4 +1,5 @@
 spring:
+  #  使用dev配置
   profiles:
     active: dev
   datasource:

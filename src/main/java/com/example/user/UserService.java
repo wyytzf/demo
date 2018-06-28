@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public interface UserService extends UserDetailsService {
-    void saveUser(User user);
+    long saveUser(User user);
 
     void updateUser(User user);
 

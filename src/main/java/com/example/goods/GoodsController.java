@@ -42,6 +42,7 @@ public class GoodsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public List<Goods> getGoods() {
         return goodsService.listGoods();
     }

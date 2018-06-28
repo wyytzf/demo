@@ -1,11 +1,8 @@
 package com.example.goods;
 
-import com.example.order.Orders;
-import com.example.producer.Producer;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 
 @Entity
@@ -21,12 +18,9 @@ public class Goods implements Serializable {
     @Column(nullable = false, name = "introduce")
     private String introduce;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(nullable = false, name = "pid")
-    private Producer producer;
 
-    @OneToMany(mappedBy = "goods")
-    private List<Orders> orders;
+//    @OneToMany(mappedBy = "goods")
+//    private List<Orders> orders;
 
     public Goods() {
 
@@ -48,9 +42,6 @@ public class Goods implements Serializable {
         this.introduce = introduce;
     }
 
-    public void setProducer(Producer producer) {
-        this.producer = producer;
-    }
 
     public Long getId() {
         return id;
@@ -68,7 +59,4 @@ public class Goods implements Serializable {
         return introduce;
     }
 
-    public Producer getProducer() {
-        return producer;
-    }
 }
