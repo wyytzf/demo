@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.security;
 
 import com.example.user.SecurityUser;
 import io.jsonwebtoken.Claims;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 @Component
-public class JwtTokenUtil implements Serializable {
+public class JwtTokenService implements Serializable {
     private final String secret = "12345678";
 
 

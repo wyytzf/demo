@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/order")
 public class OrderController {
     private OrderService orderService;
 
@@ -19,17 +18,19 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/orders/{id}", method = RequestMethod.GET)
     @PreAuthorize(value = "hasRole('ADMIN')")
     public Orders getOrderById(@PathVariable long id) {
         return orderService.getOrder(id);
     }
 
 
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/orders", method = RequestMethod.GET)
     @PreAuthorize(value = "hasRole('ADMIN')")
     public List<Orders> getOrderByUserId(@PathVariable long id) {
         return orderService.getListByUser(id);
     }
+
+    // todo:  "/orders", post生成订单的逻辑
 
 }
