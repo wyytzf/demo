@@ -31,9 +31,11 @@ public class TokenController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String login(@RequestParam String account, @RequestParam String password) {
+
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(account, password);
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         UserDetails userDetails = userService.loadUserByUsername(account);
         return jwtTokenUtil.generateToken(userDetails);
     }

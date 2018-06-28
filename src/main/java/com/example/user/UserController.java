@@ -31,9 +31,9 @@ public class UserController {
     /// @RequestBody用作application/json或者是application/xml等
     /// 不加@RequestBody form-data,x-www-form-urlencoded等。
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Long> addUser(@RequestBody User user) {
+    public ResponseEntity<String> addUser(@RequestBody User user) {
         Long id = userService.saveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(id));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

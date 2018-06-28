@@ -60,7 +60,6 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
-
     public String refreshToken(String Token) {
         String refreshToken;
         Claims claims = getClaimsFromToken(Token);
