@@ -33,7 +33,10 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> addUser(@RequestBody User user) {
         Long id = userService.saveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(id));
+        if (id > 0)
+            return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(id));
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -45,19 +48,25 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize(value = "hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<Void> updateUser(@RequestBody User user) {
-        userService.updateUser(user);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<Long> updateUser(@RequestBody User user) {
+        Long id = userService.updateUser(user);
+        if (id > 0)
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PreAuthorize(value = "hasRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public User getUser(@PathVariable("id") Long id) {
-        User userById = userService.getUser(id);
-        if (userById == null) {
-            return null;
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        // 这里，如果
+        // user.某个操作，
+        //  catch 不住异常？
+        User user = userService.getUser(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return userById;
+        return ResponseEntity.ok(user);
     }
 
     // 数据库里需要定义成ROLE_USER

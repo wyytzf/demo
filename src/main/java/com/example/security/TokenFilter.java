@@ -17,6 +17,8 @@ import java.io.IOException;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
+
+    static int i = 0;
     private UserService userService;
     private JwtTokenService jwtTokenService;
 
@@ -35,7 +37,7 @@ public class TokenFilter extends OncePerRequestFilter {
             if (account != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 SecurityUser user = (SecurityUser) userService.loadUserByUsername(account);
                 if (jwtTokenService.validateToken(tokenHead, user)) {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     request.setAttribute("currentUser", user.getId());

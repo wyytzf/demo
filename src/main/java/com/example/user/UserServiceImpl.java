@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,13 +23,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long saveUser(User user) {
-        User save = userRepository.save(user);
-        return save.getId();
+        String account = user.getAccount();
+        User userByAccount = getUserByAccount(account);
+        if (userByAccount == null) {
+            String password = user.getPassword();
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            user.setPassword(encoder.encode(password).trim());
+            return userRepository.save(user).getId();
+        } else {
+            return -1;
+        }
+
     }
 
     @Override
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public long updateUser(User user) {
+        String account = user.getAccount();
+        User userByAccount = getUserByAccount(account);
+        if (userByAccount != null) {
+            String password = user.getPassword();
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            user.setId(userByAccount.getId());
+            user.setPassword(encoder.encode(password).trim());
+            return userRepository.save(user).getId();
+        } else {
+            return -1;
+        }
+
     }
 
     @Override
@@ -38,7 +59,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(Long id) {
-        return userRepository.getOne(id);
+        User one = userRepository.findUserById(id);
+        return one;
     }
 
     @Override
