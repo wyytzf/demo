@@ -1,16 +1,15 @@
 package com.example.user;
 
 import com.example.BaseApiTest;
-import com.example.security.JwtTokenService;
-import com.example.security.Role;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.example.security.jwt.JwtTokenService;
+import com.example.security.jwt.MyUserDetailService;
+import com.example.security.jwt.UserPrincipal;
+import com.example.security.user.Role;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -26,12 +25,9 @@ public class UserControllerTest extends BaseApiTest {
     @Autowired
     private JwtTokenService jwtTokenService;
     @Autowired
-    private UserService userService;
+    private MyUserDetailService userDetailService;
     private User acuser = new User();
-    private String u1_user_token;
-    private String u2_admin_token;
-    private ObjectMapper mapper;
-    private ObjectWriter ow;
+    private String userToken;
 
     @Before
     public void setUp() {
@@ -47,12 +43,9 @@ public class UserControllerTest extends BaseApiTest {
         List<Role> list = new ArrayList<>();
         list.add(role);
         acuser.setRoles(list);
-        UserDetails userDetails_u1 = userService.loadUserByUsername("u1");
-        UserDetails userDetails_u2 = userService.loadUserByUsername("u2");
-        u1_user_token = jwtTokenService.generateToken(userDetails_u1);
-        u2_admin_token = jwtTokenService.generateToken(userDetails_u2);
-        mapper = new ObjectMapper();
-        ow = mapper.writer().withDefaultPrettyPrinter();
+
+        UserPrincipal userPrincipal = new UserPrincipal(1, "u1", "ROLE_USER");
+        userToken = jwtTokenService.generateToken(userPrincipal);
     }
 
 
@@ -67,7 +60,7 @@ public class UserControllerTest extends BaseApiTest {
 
     @Test
     public void should_add_user_successfully() throws URISyntaxException {
-        ResponseEntity<Long> response = testRestTemplate.postForEntity("/user", constructEntity(u1_user_token, acuser), Long.class);
+        ResponseEntity<Long> response = testRestTemplate.postForEntity("/user", constructEntity(userToken, acuser), Long.class);
         HttpStatus statusCode = response.getStatusCode();
         assertEquals(201, statusCode.value());
         assertNotNull(response.getBody());
