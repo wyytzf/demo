@@ -1,5 +1,6 @@
 package com.example.user;
 
+import com.example.Result;
 import com.example.order.OrderService;
 import com.example.order.Orders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,53 +32,53 @@ public class UserController {
     /// @RequestBody用作application/json或者是application/xml等
     /// 不加@RequestBody form-data,x-www-form-urlencoded等。
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> addUser(@RequestBody User user) {
+    public Result<Long> addUser(@RequestBody User user) {
         Long id = userService.saveUser(user);
         if (id > 0)
-            return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(id));
+            return new Result<>(200, "success", id);
         else
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return new Result<>(400, "fail", id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @PreAuthorize(value = "hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+    public Result<Void> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return new Result<>(200, "success", null);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize(value = "hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<Long> updateUser(@RequestBody User user) {
+    public Result<Long> updateUser(@RequestBody User user) {
         Long id = userService.updateUser(user);
         if (id > 0)
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return new Result<>(200, "success", null);
         else
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return new Result<>(400, "fail", null);
     }
 
     @PreAuthorize(value = "hasRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+    public Result<User> getUser(@PathVariable("id") Long id) {
         // 这里，如果
         // user.某个操作，
         //  catch 不住异常？
         User user = userService.getUser(id);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return new Result<>(400, "fail", null);
         }
-        return ResponseEntity.ok(user);
+        return new Result<>(200, "success", user);
     }
 
     // 数据库里需要定义成ROLE_USER
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize(value = "hasRole('ADMIN')")
-    public ResponseEntity<List<User>> getUser() {
+    public Result<List<User>> getUser() {
         List<User> users = userService.listUser();
         if (users == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return new Result<>(400, "fail", null);
         }
-        return ResponseEntity.ok(users);
+        return new Result<>(200, "success", users);
     }
 
     @RequestMapping(value = "/orders", method = RequestMethod.GET)

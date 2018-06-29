@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -34,9 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests().antMatchers("/token/**").permitAll()
-                .and().authorizeRequests().antMatchers(HttpMethod.POST,"/user").permitAll()
+                .and().authorizeRequests().antMatchers(HttpMethod.POST, "/user").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
     }
 
     @Override
@@ -48,6 +50,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public AccessDeniedHandler getAccessDeniedHandler() {
+        return new AuthenticationAccessDeniedHandler();
     }
 
 
