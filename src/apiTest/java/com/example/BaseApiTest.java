@@ -14,7 +14,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,17 +33,11 @@ public abstract class BaseApiTest {
     protected JwtTokenService jwtTokenService;
     @Autowired
     protected RoleService roleService;
-    @Autowired
-    MyUserDetailService myUserDetailService;
+
     protected String admin_token;
     protected String user_token;
 
-    public BaseApiTest() {
-        UserPrincipal adminPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("admin");
-        UserPrincipal userPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("user");
-        admin_token = jwtTokenService.generateToken(adminPrincipal);
-        user_token = jwtTokenService.generateToken(userPrincipal);
-    }
+
 
     protected HttpEntity<Object> constructEntity(String token, Object body) {
         HttpHeaders headers = new HttpHeaders();

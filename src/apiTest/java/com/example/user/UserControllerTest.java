@@ -1,6 +1,8 @@
 package com.example.user;
 
 import com.example.BaseApiTest;
+import com.example.security.jwt.MyUserDetailService;
+import com.example.security.jwt.UserPrincipal;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,19 @@ import static org.junit.Assert.assertEquals;
 public class UserControllerTest extends BaseApiTest {
 
 
-
     @Autowired
     UserService userService;
-
+    @Autowired
+    MyUserDetailService myUserDetailService;
 //    private java.lang.String admin_token;
 //    private java.lang.String user_token;
 
     @Before
     public void setUp() {
-
+        UserPrincipal adminPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("admin");
+        UserPrincipal userPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("user");
+        admin_token = jwtTokenService.generateToken(adminPrincipal);
+        user_token = jwtTokenService.generateToken(userPrincipal);
 //        UserDetails userDetails_u1 = userService.loadUserByUsername("user");
 //        UserDetails userDetails_u2 = userService.loadUserByUsername("admin");
 //        u1_user_token = jwtTokenService.generateToken(userDetails_u1);
@@ -55,13 +60,12 @@ public class UserControllerTest extends BaseApiTest {
 
 
     @Test
-    @Transactional
     public void should_add_user_successfully() throws URISyntaxException {
         String info = getRandomString(10);
         User user = createUser(info, "ROLE_USER");
         ResponseEntity<java.lang.String> response = testRestTemplate.postForEntity("/user", constructEntity(admin_token, user), java.lang.String.class);
         int body = response.getStatusCodeValue();
-        assertEquals(200, body);
+        assertEquals(201, body);
 
 //        /// 增加一个具有相同用户名的用户
 //
@@ -74,7 +78,6 @@ public class UserControllerTest extends BaseApiTest {
     //    1. 每个测试间是独立地，所以应该自己先加入用户，再来获取到它的返回结果。
 //    2. 获取列表api的设计应该是复数，上次说过了吧
     @Test
-    @Transactional
     public void should_get_users_successfully() throws Exception {
 
         /**
@@ -89,7 +92,6 @@ public class UserControllerTest extends BaseApiTest {
 
         //具有ADMIN权限
         ResponseEntity<String> response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(admin_token, null), String.class);
-
         assertEquals(200, response.getStatusCodeValue());
         //具有USER权限,403
         response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(user_token, null), String.class);
