@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -20,16 +20,14 @@ public class Orders implements Serializable {
     @OneToOne
     @JoinColumn(nullable = false, name = "uid")
     private User user;
-    @Column(name = "payment")
-    private String payment;
-    @Column(name = "post_fee")
-    private String post_fee;
-    @Column(name = "address")
+    /* 订单花费 */
+    private BigDecimal payment;
+    /* 邮费 */
+    private BigDecimal post_fee;
+    /* 地址 */
     private String address;
-    @Column(name = "create_time")
-    private Date create_time;
-    @Column(name = "payment_time")
-    private Date payment_time;
+    /* 订单状态 0-出库中，1-配送中，2-已签收,3-已拒收,4-申请退款中，5-申请退货中,6-完成 */
+    private short stutas;
 
     @OneToMany
     @JoinColumn(nullable = false, name = "oid")
@@ -39,6 +37,9 @@ public class Orders implements Serializable {
 
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Long getId() {
         return id;
@@ -48,11 +49,11 @@ public class Orders implements Serializable {
         return user;
     }
 
-    public String getPayment() {
+    public BigDecimal getPayment() {
         return payment;
     }
 
-    public String getPost_fee() {
+    public BigDecimal getPost_fee() {
         return post_fee;
     }
 
@@ -60,14 +61,9 @@ public class Orders implements Serializable {
         return address;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public short getStutas() {
+        return stutas;
     }
-
-    public Date getPayment_time() {
-        return payment_time;
-    }
-
 
     public List<OrderItem> getList() {
         return list;
@@ -81,11 +77,11 @@ public class Orders implements Serializable {
         this.user = user;
     }
 
-    public void setPayment(String payment) {
+    public void setPayment(BigDecimal payment) {
         this.payment = payment;
     }
 
-    public void setPost_fee(String post_fee) {
+    public void setPost_fee(BigDecimal post_fee) {
         this.post_fee = post_fee;
     }
 
@@ -93,12 +89,8 @@ public class Orders implements Serializable {
         this.address = address;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
-    }
-
-    public void setPayment_time(Date payment_time) {
-        this.payment_time = payment_time;
+    public void setStutas(short stutas) {
+        this.stutas = stutas;
     }
 
     public void setList(List<OrderItem> list) {

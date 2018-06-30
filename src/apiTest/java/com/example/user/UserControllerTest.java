@@ -73,7 +73,7 @@ public class UserControllerTest extends BaseApiTest {
     @Test
     public void should_add_user_successfully() throws URISyntaxException {
         String info = getRandomString(10);
-        User user = createUser(info, "ROLE_USER");
+        User user = createUser("admin", "ROLE_ADMIN");
         ResponseEntity<Result> response = testRestTemplate.postForEntity("/user", constructEntity(null, user), Result.class);
         Result body = response.getBody();
         assertEquals(200, body.getCode().intValue());

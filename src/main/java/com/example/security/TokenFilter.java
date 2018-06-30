@@ -18,7 +18,6 @@ import java.io.IOException;
 @Component
 public class TokenFilter extends OncePerRequestFilter {
 
-    static int i = 0;
     private UserService userService;
     private JwtTokenService jwtTokenService;
 

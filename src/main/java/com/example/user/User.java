@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,8 +24,6 @@ public class User implements Serializable {
     private String email;
     @Column(nullable = false, name = "phone")
     private String phone;
-    @Column(nullable = false, name = "registertime")
-    private Date registertime;
 
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
@@ -62,10 +59,6 @@ public class User implements Serializable {
         return phone;
     }
 
-    public Date getRegistertime() {
-        return registertime;
-    }
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -80,10 +73,6 @@ public class User implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public void setRegistertime(Date registertime) {
-        this.registertime = registertime;
     }
 
     public void setAccount(String account) {

@@ -46,6 +46,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Orders> getListByStatus(int status) {
+        return orderRepository.findOrdersByStutas(status);
+    }
+
+    @Override
     public Page<Orders> getListByUser(Long id, Pageable pageable) {
         return orderRepository.findAll(pageable);
     }

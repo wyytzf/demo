@@ -9,10 +9,12 @@ import java.util.List;
 public class GoodsServiceImpl implements GoodsService {
 
     private GoodsRepository goodsRepository;
+    private GoodsCategoryRepository goodsCategoryRepository;
 
     @Autowired
-    public GoodsServiceImpl(GoodsRepository goodsRepository) {
+    public GoodsServiceImpl(GoodsRepository goodsRepository, GoodsCategoryRepository goodsCategoryRepository) {
         this.goodsRepository = goodsRepository;
+        this.goodsCategoryRepository = goodsCategoryRepository;
     }
 
 
@@ -40,4 +42,5 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> listGoods() {
         return goodsRepository.findAll();
     }
+
 }

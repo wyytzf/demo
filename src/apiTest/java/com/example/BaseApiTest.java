@@ -15,7 +15,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,6 @@ public abstract class BaseApiTest {
         user.setRealname(info);
         user.setEmail(info);
         user.setPhone(info);
-        user.setRegistertime(new Date());
 
         // Role 从数据库获取
         Role role = new Role();

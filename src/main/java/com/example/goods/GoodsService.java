@@ -15,4 +15,6 @@ public interface GoodsService {
     Goods getGoods(Long id);
 
     List<Goods> listGoods();
+
+
 }

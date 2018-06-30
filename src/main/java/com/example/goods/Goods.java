@@ -1,9 +1,8 @@
 package com.example.goods;
 
-
 import javax.persistence.*;
 import java.io.Serializable;
-
+import java.math.BigDecimal;
 
 @Entity
 public class Goods implements Serializable {
@@ -11,19 +10,49 @@ public class Goods implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, name = "name")
+    /* 商品名称 */
     private String name;
-    @Column(nullable = false, name = "price")
-    private int price;
-    @Column(nullable = false, name = "introduce")
+    /* 商品价格 */
+    private BigDecimal price;
+    /* 商品库存 */
+    private int stock;
+    /* 商品描述 */
     private String introduce;
-
-
-//    @OneToMany(mappedBy = "goods")
-//    private List<Orders> orders;
+    @OneToOne
+    @JoinColumn(nullable = false, name = "category_id")
+    /* 商品类别*/
+    private GoodsCategory goodsCategory;
 
     public Goods() {
 
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public GoodsCategory getGoodsCategory() {
+        return goodsCategory;
     }
 
     public void setId(Long id) {
@@ -34,29 +63,19 @@ public class Goods implements Serializable {
         this.name = name;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }
 
-
-    public Long getId() {
-        return id;
+    public void setGoodsCategory(GoodsCategory goodsCategory) {
+        this.goodsCategory = goodsCategory;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public String getIntroduce() {
-        return introduce;
-    }
-
 }

@@ -15,6 +15,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     List<Orders> findOrdersByUserId(Long uid);
 
+
+    List<Orders> findOrdersByStutas(int status);
     //
 //    @Query("select o from orders as o where o.id = ?1")
 //    Page<Orders> findOrdersByUserId(Long uid, Pageable pageable);

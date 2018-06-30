@@ -17,6 +17,10 @@ public class Role implements Serializable {
 
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     public Long getId() {
         return id;
     }
