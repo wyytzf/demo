@@ -1,16 +1,17 @@
 package com.example;
 
-public class Result<T> {
-    private Integer code;
-    private String msg;
-    private T data;
+import java.io.Serializable;
 
+public class Result<T> implements Serializable {
+    private Integer code;
+    private java.lang.String msg;
+    private T data;
 
     public Result() {
 
     }
 
-    public Result(Integer code, String msg, T data) {
+    public Result(Integer code, java.lang.String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -20,7 +21,7 @@ public class Result<T> {
         return code;
     }
 
-    public String getMsg() {
+    public java.lang.String getMsg() {
         return msg;
     }
 
@@ -32,7 +33,7 @@ public class Result<T> {
         this.code = code;
     }
 
-    public void setMsg(String msg) {
+    public void setMsg(java.lang.String msg) {
         this.msg = msg;
     }
 

@@ -59,7 +59,7 @@ public class JwtTokenService implements Serializable {
 
     public JwtAuthenticationToken from(String jwtToken) {
         Claims claims = getClaimsFromToken(jwtToken);
-        String role = (String) claims.get("SCOPE");
+        String role = (String) claims.get("SCOPES");
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role));
         UserPrincipal user = new UserPrincipal(Long.valueOf(claims.getSubject()), String.valueOf(claims.get("NAME")), role);

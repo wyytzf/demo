@@ -12,9 +12,8 @@ public class LoginApiTest extends BaseApiTest {
 
     @Test
     public void should_get_token_successfully() {
-        UsernamePasswordLoginCommand user = new UsernamePasswordLoginCommand("u1", "u1");
+        UsernamePasswordLoginCommand user = new UsernamePasswordLoginCommand("admin", "admin");
         ResponseEntity<String> response = testRestTemplate.postForEntity("/login", user, String.class);
-        System.out.println(response);
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response);
     }

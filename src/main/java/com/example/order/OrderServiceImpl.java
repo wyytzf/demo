@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Orders> getListByStatus(int status) {
-        return orderRepository.findOrdersByStutas(status);
+        return orderRepository.findOrdersByStatus(status);
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -33,12 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new PasswordEncoder() {
             @Override
             public String encode(CharSequence rawPassword) {
-                return rawPassword.toString();
+//                return rawPassword.toString();
+                return new BCryptPasswordEncoder(16).encode(rawPassword).trim();
             }
 
             @Override
             public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                return rawPassword.toString().equals(encodedPassword);
+//                return rawPassword.toString().equals(encodedPassword);
+                return new BCryptPasswordEncoder(16).matches(rawPassword, encodedPassword);
             }
         };
     }
@@ -46,19 +49,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf()
-            .disable()
-            .authorizeRequests()
-            .antMatchers("/login").permitAll()
-            .antMatchers("/error").permitAll()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .exceptionHandling()
-            .authenticationEntryPoint(unauthorizedHandler)
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/error").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(this.authenticationManager());
         http.addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class);
@@ -68,9 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .authenticationProvider(jwtAuthenticationProvider)
-            .userDetailsService(myUserDetailService)
-            .passwordEncoder(passwordEncoder());
+                .authenticationProvider(jwtAuthenticationProvider)
+                .userDetailsService(myUserDetailService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)

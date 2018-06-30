@@ -28,8 +28,9 @@ public class MyUserDetailService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("UsernameNotFoundException");
         } else {
-            return new UserPrincipal(user.getId(), user.getAccount(), user.getPassword(), "ROLE_USER", user.getRoles().
-                stream().map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+            ///  role 和 Authority?
+            return new UserPrincipal(user.getId(), user.getAccount(), user.getPassword(), user.getRoles().get(0).getName(), user.getRoles().
+                    stream().map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
         }
     }
 }

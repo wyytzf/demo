@@ -27,7 +27,7 @@ public class Orders implements Serializable {
     /* 地址 */
     private String address;
     /* 订单状态 0-出库中，1-配送中，2-已签收,3-已拒收,4-申请退款中，5-申请退货中,6-完成 */
-    private short stutas;
+    private short status;
 
     @OneToMany
     @JoinColumn(nullable = false, name = "oid")
@@ -62,7 +62,7 @@ public class Orders implements Serializable {
     }
 
     public short getStutas() {
-        return stutas;
+        return status;
     }
 
     public List<OrderItem> getList() {
@@ -90,7 +90,7 @@ public class Orders implements Serializable {
     }
 
     public void setStutas(short stutas) {
-        this.stutas = stutas;
+        this.status = stutas;
     }
 
     public void setList(List<OrderItem> list) {

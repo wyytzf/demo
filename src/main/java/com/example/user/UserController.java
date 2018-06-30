@@ -4,11 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +22,11 @@ public class UserController {
 
     /// @RequestBody用作application/json或者是application/xml等
     /// 不加@RequestBody form-data,x-www-form-urlencoded等。
+    ///
+    ///
+    //
     @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<Long> addUser(@RequestBody User user) {
         Long id = applicationService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);

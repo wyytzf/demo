@@ -1,14 +1,12 @@
 package com.example.user;
 
 import com.example.BaseApiTest;
-import com.example.Result;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
 
@@ -17,35 +15,22 @@ import static org.junit.Assert.assertEquals;
 public class UserControllerTest extends BaseApiTest {
 
 
+
     @Autowired
-    private UserService userService;
-    private User acuser = new User();
-    private String u1_user_token;
-    private String u2_admin_token;
-    private ObjectMapper mapper;
-    private ObjectWriter ow;
+    UserService userService;
+
+//    private java.lang.String admin_token;
+//    private java.lang.String user_token;
 
     @Before
     public void setUp() {
-//        acuser.setAccount("test_post");
-//        acuser.setPassword("test_post");
-//        acuser.setRealname("test_post");
-//        acuser.setEmail("test_post");
-//        acuser.setPhone("test_post");
-//        acuser.setRegistertime(new Date());
-//
-//        Role role = new Role();
-//        role.setName("ROLE_USER");
-//        List<Role> list = new ArrayList<>();
-//        list.add(role);
-//        acuser.setRoles(list);
 
 //        UserDetails userDetails_u1 = userService.loadUserByUsername("user");
 //        UserDetails userDetails_u2 = userService.loadUserByUsername("admin");
 //        u1_user_token = jwtTokenService.generateToken(userDetails_u1);
 //        u2_admin_token = jwtTokenService.generateToken(userDetails_u2);
-        mapper = new ObjectMapper();
-        ow = mapper.writer().withDefaultPrettyPrinter();
+
+
     }
 
 
@@ -59,7 +44,7 @@ public class UserControllerTest extends BaseApiTest {
 //    8. current_id这里可以不assert返回的body，因为你也不知道它是多少；或者可以直接判断它是否非空
 
     private static String getRandomString(int length) {
-        String string = "abcdefghijklmnopqrstuvwxyz";
+        java.lang.String string = "abcdefghijklmnopqrstuvwxyz";
         StringBuffer sb = new StringBuffer();
         int len = string.length();
         for (int i = 0; i < length; i++) {
@@ -70,24 +55,26 @@ public class UserControllerTest extends BaseApiTest {
 
 
     @Test
+    @Transactional
     public void should_add_user_successfully() throws URISyntaxException {
         String info = getRandomString(10);
-        User user = createUser("admin", "ROLE_ADMIN");
-        ResponseEntity<Result> response = testRestTemplate.postForEntity("/user", constructEntity(null, user), Result.class);
-        Result body = response.getBody();
-        assertEquals(200, body.getCode().intValue());
+        User user = createUser(info, "ROLE_USER");
+        ResponseEntity<java.lang.String> response = testRestTemplate.postForEntity("/user", constructEntity(admin_token, user), java.lang.String.class);
+        int body = response.getStatusCodeValue();
+        assertEquals(200, body);
 
-        /// 增加一个具有相同用户名的用户
-
-        response = testRestTemplate.postForEntity("/user", constructEntity(null, user), Result.class);
-        body = response.getBody();
-        assertEquals(400, body.getCode().intValue());
+//        /// 增加一个具有相同用户名的用户
+//
+//        response = testRestTemplate.postForEntity("/user", constructEntity(admin_token, user), String.class);
+//        body = response.getStatusCodeValue();
+//        assertEquals(400, body.getCode().intValue());
 //        assertNotNull(response.getBody());
     }
 
     //    1. 每个测试间是独立地，所以应该自己先加入用户，再来获取到它的返回结果。
 //    2. 获取列表api的设计应该是复数，上次说过了吧
     @Test
+    @Transactional
     public void should_get_users_successfully() throws Exception {
 
         /**
@@ -95,40 +82,37 @@ public class UserControllerTest extends BaseApiTest {
          *
          * 未完成
          */
+        String info = getRandomString(10);
+        User user = createUser(info, "ROLE_USER");
+        long id = userService.saveUser(user);
+
 
         //具有ADMIN权限
-        ResponseEntity<Result> response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(u2_admin_token, null), Result.class);
-        Result body = response.getBody();
-        assertEquals(200, body.getCode().intValue());
-        //具有USER权限,403直接拒绝
-        response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(u1_user_token, null), Result.class);
+        ResponseEntity<String> response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(admin_token, null), String.class);
+
+        assertEquals(200, response.getStatusCodeValue());
+        //具有USER权限,403
+        response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(user_token, null), String.class);
         assertEquals(403, response.getStatusCodeValue());
-        //不具有权限,403直接拒绝
-        response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(null, null), Result.class);
-        assertEquals(403, response.getStatusCodeValue());
+        //不具有权限,401未授权
+        response = testRestTemplate.exchange("/user", HttpMethod.GET, constructEntity(null, null), String.class);
+        assertEquals(401, response.getStatusCodeValue());
+
 
         //具有ADMIN权限，得到某一存在的用户
-        response = testRestTemplate.exchange("/user/1", HttpMethod.GET, constructEntity(u2_admin_token, null), Result.class);
-        body = response.getBody();
-        assertEquals(200, body.getCode().intValue());
-
-        //具有ADMIN权限，得到不存在的用户
-        response = testRestTemplate.exchange("/user/999", HttpMethod.GET, constructEntity(u2_admin_token, null), Result.class);
-        body = response.getBody();
-        assertEquals(400, body.getCode().intValue());
-
-
+        response = testRestTemplate.exchange("/user/" + id, HttpMethod.GET, constructEntity(admin_token, null), String.class);
+        assertEquals(200, response.getStatusCodeValue());
+        //具有ADMIN权限，得到不存在的用户,返回200
+        response = testRestTemplate.exchange("/user/999", HttpMethod.GET, constructEntity(admin_token, null), String.class);
+        assertEquals(200, response.getStatusCodeValue());
         //具有ADMIN权限，用户id不为数字,400badrequest
-        response = testRestTemplate.exchange("/user/asd", HttpMethod.GET, constructEntity(u2_admin_token, null), Result.class);
+        response = testRestTemplate.exchange("/user/asd", HttpMethod.GET, constructEntity(admin_token, null), String.class);
         assertEquals(400, response.getStatusCodeValue());
-
         //具有USER权限，得到某一存在的用户,403直接拒绝
-        response = testRestTemplate.exchange("/user/1", HttpMethod.GET, constructEntity(u1_user_token, null), Result.class);
+        response = testRestTemplate.exchange("/user/" + id, HttpMethod.GET, constructEntity(user_token, null), String.class);
         assertEquals(403, response.getStatusCodeValue());
-
-
         //具有USER权限，得到不存在的用户,403直接拒绝
-        response = testRestTemplate.exchange("/user/999", HttpMethod.GET, constructEntity(u1_user_token, null), Result.class);
+        response = testRestTemplate.exchange("/user/999", HttpMethod.GET, constructEntity(user_token, null), String.class);
         assertEquals(403, response.getStatusCodeValue());
 
         /// 所有
@@ -150,19 +134,26 @@ public class UserControllerTest extends BaseApiTest {
 
     //    1. 每个测试间是独立地，所以应该自己先加入用户，再来更新这个用户。
     @Test
+    @Transactional
     public void should_update_user_successfully() throws Exception {
+
 
         String info = getRandomString(10);
         User user = createUser(info, "ROLE_USER");
-        String token = createToken(user);
-        ResponseEntity<Result> response = testRestTemplate.postForEntity("/user", constructEntity(null, user), Result.class);
+        long id = userService.saveUser(user);
 
-        user.setPassword("new" + info);
+//        String info = getRandomString(10);
+//        User user = createUser(info, "ROLE_USER");
+//        String token = createToken(user);
+//        ResponseEntity<String> response = testRestTemplate.postForEntity("/user", constructEntity(null, user), String.class);
+//
+        user.setId(id);
+//        user.setPassword("new" + info);
         user.setEmail("new" + info);
 
-        response = testRestTemplate.exchange("/user", HttpMethod.PUT, constructEntity(token, user), Result.class);
-        Result body = response.getBody();
-        assertEquals(200, body.getCode().intValue());
+        ResponseEntity<String> response = testRestTemplate.exchange("/user", HttpMethod.PUT, constructEntity(admin_token, user), String.class);
+//        String body = response.getBody();
+        assertEquals(204, response.getStatusCodeValue());
 //        acuser.setId(current_id);
 //        acuser.setPassword("test_put");
 //        acuser.setRealname("test_put");
@@ -179,15 +170,19 @@ public class UserControllerTest extends BaseApiTest {
     public void should_delete_user_successfully() throws Exception {
 
         String info = getRandomString(10);
-        User user = createUser(info, "ROLE_ADMIN");
-        String token = createToken(user);
-        ResponseEntity<Result> response = testRestTemplate.postForEntity("/user", constructEntity(null, user), Result.class);
-        Result body = response.getBody();
-//        user = (User) body.getData();
-        response = testRestTemplate.exchange("/user/" + body.getData(), HttpMethod.DELETE, constructEntity(token, null), Result.class);
-        body = response.getBody();
-        assertEquals(200, body.getCode().intValue());
-//        assertEquals(204, response.getStatusCode().value());
+        User user = createUser(info, "ROLE_USER");
+        long id = userService.saveUser(user);
+
+//        String info = getRandomString(10);
+//        User user = createUser(info, "ROLE_ADMIN");
+//        String token = createToken(user);
+//        ResponseEntity<String> response = testRestTemplate.postForEntity("/user", constructEntity(null, user), String.class);
+//        String body = response.getBody();
+////        user = (User) body.getData();
+        ResponseEntity<String> response = testRestTemplate.exchange("/user/" + id, HttpMethod.DELETE, constructEntity(admin_token, null), String.class);
+//        body = response.getBody();
+//        assertEquals(200, body.getCode().intValue());
+        assertEquals(204, response.getStatusCodeValue());
 //        RequestEntity requestEntity = RequestEntity
 //                .delete(new URI("http://localhost:8080/user/" + current_id)).accept(MediaType.APPLICATION_JSON)
 //                .header("Authorization", "Bearer " + u2_admin_token).build();

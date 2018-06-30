@@ -1,8 +1,10 @@
 package com.example;
 
-import com.example.security.Role;
+import com.example.security.jwt.JwtTokenService;
+import com.example.security.jwt.MyUserDetailService;
+import com.example.security.jwt.UserPrincipal;
+import com.example.security.user.Role;
 import com.example.security.user.RoleService;
-import com.example.user.SecurityUser;
 import com.example.user.User;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -33,7 +34,17 @@ public abstract class BaseApiTest {
     protected JwtTokenService jwtTokenService;
     @Autowired
     protected RoleService roleService;
+    @Autowired
+    MyUserDetailService myUserDetailService;
+    protected String admin_token;
+    protected String user_token;
 
+    public BaseApiTest() {
+        UserPrincipal adminPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("admin");
+        UserPrincipal userPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("user");
+        admin_token = jwtTokenService.generateToken(adminPrincipal);
+        user_token = jwtTokenService.generateToken(userPrincipal);
+    }
 
     protected HttpEntity<Object> constructEntity(String token, Object body) {
         HttpHeaders headers = new HttpHeaders();
@@ -68,8 +79,7 @@ public abstract class BaseApiTest {
     }
 
     protected String createToken(User user) {
-        SecurityUser securityUser = new SecurityUser(0, user.getAccount(), user.getPassword(), user.getRoles().
-                stream().map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+        UserPrincipal securityUser = new UserPrincipal(user.getId(), user.getAccount(), user.getRoles().get(0).getName());
         return jwtTokenService.generateToken(securityUser);
     }
 
