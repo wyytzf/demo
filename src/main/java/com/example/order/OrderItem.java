@@ -14,9 +14,9 @@ public class OrderItem implements Serializable {
     @JsonIgnore
     @Column(nullable = false, name = "oid", insertable = false, updatable = false)
     private long oid;
-    @Column(nullable = false, name = "num")
+    /* 数量 */
     private int num;
-    @Column(nullable = false, name = "price")
+    /* 成交价 */
     private double price;
     @OneToOne
     @JoinColumn(nullable = false, name = "gid")
@@ -34,16 +34,16 @@ public class OrderItem implements Serializable {
         return oid;
     }
 
-    public Goods getGoods() {
-        return goods;
-    }
-
     public int getNum() {
         return num;
     }
 
     public double getPrice() {
         return price;
+    }
+
+    public Goods getGoods() {
+        return goods;
     }
 
     public void setId(Long id) {
@@ -54,15 +54,15 @@ public class OrderItem implements Serializable {
         this.oid = oid;
     }
 
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
     public void setNum(int num) {
         this.num = num;
     }
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public void setGoods(Goods goods) {
+        this.goods = goods;
     }
 }

@@ -1,20 +1,11 @@
 package com.example.user;
 
+
 import com.example.security.user.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,13 +25,11 @@ public class User implements Serializable {
     private String email;
     @Column(nullable = false, name = "phone")
     private String phone;
-    @Column(nullable = false, name = "registertime")
-    private Date registertime;
 
-    @OneToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "userinrole", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "id")}
             , inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "id")})
-    @JsonIgnore
     private List<Role> roles;
 
     public User() {
@@ -71,10 +60,6 @@ public class User implements Serializable {
         return phone;
     }
 
-    public Date getRegistertime() {
-        return registertime;
-    }
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -89,10 +74,6 @@ public class User implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public void setRegistertime(Date registertime) {
-        this.registertime = registertime;
     }
 
     public void setAccount(String account) {
@@ -126,4 +107,8 @@ public class User implements Serializable {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

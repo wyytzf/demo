@@ -18,6 +18,9 @@ public interface OrderService {
 
     List<Orders> getListByUser(Long uid);
 
+    List<Orders> getListByStatus(int status);
+
+
     Page<Orders> getListByUser(Long id, Pageable pageable);
 
 }

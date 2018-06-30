@@ -1,24 +1,21 @@
-package com.example.security.user;
+package com.example.goods;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 
 @Entity
-public class Role implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
+public class GoodsCategory {
+    @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "name")
+    /* 类别名字 */
     private String name;
 
-    public Role() {
+    public GoodsCategory() {
 
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Long getId() {
