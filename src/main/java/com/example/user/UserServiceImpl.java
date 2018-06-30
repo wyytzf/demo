@@ -1,6 +1,5 @@
 package com.example.user;
 
-import com.example.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -74,18 +72,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> listUser() {
         return userRepository.findAll();
-    }
-
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByAccount(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("UsernameNotFoundException");
-        } else {
-            return new SecurityUser(user.getId(), user.getAccount(), user.getPassword(), user.getRoles().
-                    stream().map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
-        }
-
     }
 }

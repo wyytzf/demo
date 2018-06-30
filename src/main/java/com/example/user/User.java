@@ -1,6 +1,7 @@
 package com.example.user;
 
-import com.example.security.Role;
+
+import com.example.security.user.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;

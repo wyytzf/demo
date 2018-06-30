@@ -1,4 +1,4 @@
-package com.example.security;
+package com.example.security.user;
 
 import javax.persistence.*;
 import java.io.Serializable;

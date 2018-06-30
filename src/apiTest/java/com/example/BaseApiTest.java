@@ -1,8 +1,7 @@
 package com.example;
 
-import com.example.security.JwtTokenService;
 import com.example.security.Role;
-import com.example.security.RoleService;
+import com.example.security.user.RoleService;
 import com.example.user.SecurityUser;
 import com.example.user.User;
 import org.junit.runner.RunWith;

@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.net.URISyntaxException;
 
@@ -41,10 +40,10 @@ public class UserControllerTest extends BaseApiTest {
 //        list.add(role);
 //        acuser.setRoles(list);
 
-        UserDetails userDetails_u1 = userService.loadUserByUsername("user");
-        UserDetails userDetails_u2 = userService.loadUserByUsername("admin");
-        u1_user_token = jwtTokenService.generateToken(userDetails_u1);
-        u2_admin_token = jwtTokenService.generateToken(userDetails_u2);
+//        UserDetails userDetails_u1 = userService.loadUserByUsername("user");
+//        UserDetails userDetails_u2 = userService.loadUserByUsername("admin");
+//        u1_user_token = jwtTokenService.generateToken(userDetails_u1);
+//        u2_admin_token = jwtTokenService.generateToken(userDetails_u2);
         mapper = new ObjectMapper();
         ow = mapper.writer().withDefaultPrettyPrinter();
     }
