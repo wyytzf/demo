@@ -29,23 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-//                return rawPassword.toString();
-                return new BCryptPasswordEncoder(16).encode(rawPassword).trim();
-            }
-
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-//                return rawPassword.toString().equals(encodedPassword);
-                return new BCryptPasswordEncoder(16).matches(rawPassword, encodedPassword);
-            }
-        };
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -80,5 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new BCryptPasswordEncoder().encode("u3"));
     }
 }

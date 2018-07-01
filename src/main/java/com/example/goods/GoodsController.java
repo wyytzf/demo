@@ -32,7 +32,7 @@ public class GoodsController {
         return new Result<>(200, "success", null);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @PreAuthorize(value = "hasRole('ADMIN')")
     public Result<String> updateGoods(@RequestBody Goods goods) {
         goodsService.updateGoods(goods);

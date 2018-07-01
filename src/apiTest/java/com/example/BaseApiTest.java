@@ -6,6 +6,7 @@ import com.example.security.jwt.UserPrincipal;
 import com.example.security.user.Role;
 import com.example.security.user.RoleService;
 import com.example.user.User;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,15 +30,23 @@ public abstract class BaseApiTest {
 
     @Autowired
     protected TestRestTemplate testRestTemplate;
+
     @Autowired
     protected JwtTokenService jwtTokenService;
+
     @Autowired
-    protected RoleService roleService;
+    MyUserDetailService myUserDetailService;
 
     protected String admin_token;
     protected String user_token;
 
-
+    @Before
+    public void setUp() {
+        UserPrincipal adminPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("u2");
+        UserPrincipal userPrincipal = (UserPrincipal) myUserDetailService.loadUserByUsername("u1");
+        admin_token = jwtTokenService.generateToken(adminPrincipal);
+        user_token = jwtTokenService.generateToken(userPrincipal);
+    }
 
     protected HttpEntity<Object> constructEntity(String token, Object body) {
         HttpHeaders headers = new HttpHeaders();
@@ -75,6 +84,4 @@ public abstract class BaseApiTest {
         UserPrincipal securityUser = new UserPrincipal(user.getId(), user.getAccount(), user.getRoles().get(0).getName());
         return jwtTokenService.generateToken(securityUser);
     }
-
-
 }

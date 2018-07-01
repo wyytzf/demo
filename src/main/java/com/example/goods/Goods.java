@@ -18,6 +18,7 @@ public class Goods implements Serializable {
     private int stock;
     /* 商品描述 */
     private String introduce;
+
     @OneToOne
     @JoinColumn(nullable = false, name = "category_id")
     /* 商品类别*/

@@ -25,12 +25,6 @@ import static org.springframework.web.context.request.RequestContextHolder.getRe
 public class JwtTokenService implements Serializable {
     private final String secret = "12345678";
 
-    private MyUserDetailService userDetailService;
-
-    public JwtTokenService(MyUserDetailService userDetailService) {
-        this.userDetailService = userDetailService;
-    }
-
     public String generateToken(UserPrincipal userPrincipal) {
 
         byte[] encodedKey = Base64.decodeBase64(secret);

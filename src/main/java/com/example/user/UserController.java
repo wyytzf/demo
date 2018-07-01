@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @PreAuthorize(value = "hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Void> updateUser(@RequestBody User user) {
         applicationService.updateUser(user);
