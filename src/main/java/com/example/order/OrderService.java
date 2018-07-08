@@ -8,19 +8,19 @@ import java.util.List;
 
 @Service
 public interface OrderService {
-    boolean addOrder(Orders order);
+    boolean addOrder(Order order);
 
     void deleteOrder(Long id);
 
-    boolean updateOrder(Orders order);
+    boolean updateOrder(Order order);
 
-    Orders getOrder(Long id);
+    Order getOrder(Long id);
 
-    List<Orders> getListByUser(Long uid);
+    List<Order> getListByUser(Long uid);
 
-    List<Orders> getListByStatus(int status);
+    List<Order> getListByStatus(int status);
 
 
-    Page<Orders> getListByUser(Long id, Pageable pageable);
+    Page<Order> getListByUser(Long id, Pageable pageable);
 
 }

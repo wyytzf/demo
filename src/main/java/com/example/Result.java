@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Result<T> implements Serializable {
     private Integer code;
-    private java.lang.String msg;
+    private String msg;
     private T data;
 
     public Result() {

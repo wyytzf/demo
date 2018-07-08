@@ -12,7 +12,7 @@ public class OrderItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JsonIgnore
-    @Column(nullable = false, name = "oid", insertable = false, updatable = false)
+//    @Column(nullable = false, name = "oid", insertable = false, updatable = false)
     private long oid;
     /* 数量 */
     private int num;

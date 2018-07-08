@@ -1,5 +1,7 @@
 package com.example.user;
 
+import com.example.security.user.Role;
+import com.example.security.user.RoleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,14 +10,27 @@ import java.util.List;
 @Service
 public class UserApplicationService {
     private UserService userService;
+    private RoleRepository roleRepository;
 
-    public UserApplicationService(UserService userService) {
+    public UserApplicationService(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
     }
 
     @Transactional
     public Long saveUser(User user) {
-        return userService.saveUser(user);
+        long uid = userService.saveUser(user);
+        List<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            Role t = roleRepository.findByName(role.getName());
+            if (t == null) {
+                // 抛异常
+                System.out.println("t == null");
+            }
+            roleRepository.addRole(uid, t.getId());
+        }
+
+        return uid;
     }
 
     @Transactional

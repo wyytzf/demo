@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
+//                .antMatchers("/orders").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/error").permitAll()
                 .anyRequest()
@@ -48,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(this.authenticationManager());
         http.addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterAfter(filter,FilterSecurityInterceptor.class);
 
     }
 
@@ -57,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(jwtAuthenticationProvider)
                 .userDetailsService(myUserDetailService)
                 .passwordEncoder(passwordEncoder());
+
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)

@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
-public class Orders implements Serializable {
+@Table(name = "orders")
+public class Order implements Serializable {
     private static final long serialVersionUID = 4L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,11 @@ public class Orders implements Serializable {
     /* 订单状态 0-出库中，1-配送中，2-已签收,3-已拒收,4-申请退款中，5-申请退货中,6-完成 */
     private short status;
 
-    @OneToMany
-    @JoinColumn(nullable = false, name = "oid")
-    private List<OrderItem> list;
+//    @OneToMany
+//    @JoinColumn(nullable = false, name = "oid")
+//    private List<OrderItem> list;
 
-    public Orders() {
+    public Order() {
 
     }
 
@@ -65,9 +65,9 @@ public class Orders implements Serializable {
         return status;
     }
 
-    public List<OrderItem> getList() {
-        return list;
-    }
+//    public List<OrderItem> getList() {
+//        return list;
+//    }
 
     public void setId(Long id) {
         this.id = id;
@@ -93,8 +93,8 @@ public class Orders implements Serializable {
         this.status = stutas;
     }
 
-    public void setList(List<OrderItem> list) {
-        this.list = list;
-    }
+//    public void setList(List<OrderItem> list) {
+//        this.list = list;
+//    }
 }
 

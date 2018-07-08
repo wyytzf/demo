@@ -3,7 +3,6 @@ package com.example.user;
 import com.example.BaseApiTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +47,7 @@ public class UserControllerTest extends BaseApiTest {
         /**
          * 先添加一个ROLE_USER权限用户和一个ROLE_ADMIN权限用户
          *
-         * 未完成
+         *
          */
 
         String info = RandomStringUtils.randomAscii(10);
@@ -104,7 +103,6 @@ public class UserControllerTest extends BaseApiTest {
     @Test
     @Transactional
     public void should_update_user_successfully() throws Exception {
-
 
         String info = RandomStringUtils.randomAscii(10);
         User user = createUser(info, "ROLE_USER");

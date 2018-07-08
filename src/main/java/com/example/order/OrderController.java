@@ -25,22 +25,26 @@ public class OrderController {
 
     @RequestMapping(value = "/orders/{id}", method = RequestMethod.GET)
     @PreAuthorize(value = "hasRole('ADMIN')")
-    public Orders getOrderById(@PathVariable long id) {
+    public Order getOrderById(@PathVariable long id) {
         return orderService.getOrder(id);
     }
 
     // todo:  "/orders", post生成订单的逻辑
 
+    @PostMapping(value = "/orders")
+    public void addOrders(@RequestBody Order order) {
+        orderService.addOrder(order);
+    }
+
     @RequestMapping(value = "/orders", method = RequestMethod.GET)
     @PreAuthorize(value = "hasAnyRole('USER','ADMIN')")
-    public Page<Orders> getOrders(@RequestParam(value = "id") long id,
-                                  @RequestParam(value = "page", defaultValue = "0") int page,
-                                  @RequestParam(value = "size", defaultValue = "20") int size) {
+    public Page<Order> getOrders(@RequestParam(value = "id") long id,
+                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                 @RequestParam(value = "size", defaultValue = "20") int size) {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         return orderService.getListByUser(id, pageable);
     }
-
 
     /*
      * 业务上一般不会对order进行更新
@@ -48,8 +52,8 @@ public class OrderController {
      * */
     @RequestMapping(value = "/orders", method = RequestMethod.PUT)
     @PreAuthorize(value = "hasRole('USER')")
-    public ResponseEntity<Void> updateOrders(@RequestBody Orders orders) {
-        boolean ok = orderService.updateOrder(orders);
+    public ResponseEntity<Void> updateOrders(@RequestBody Order order) {
+        boolean ok = orderService.updateOrder(order);
         if (ok)
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         else

@@ -27,9 +27,10 @@ public class User implements Serializable {
     private String phone;
 
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_in_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "id")}
-            , inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "id")})
+//    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+////    @JoinTable(name = "user_in_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "id")}
+////            , inverseJoinColumns = {@JoinColumn(name = "rid", referencedColumnName = "id")})
+    @Transient
     private List<Role> roles;
 
     public User() {
@@ -111,4 +112,5 @@ public class User implements Serializable {
     public String toString() {
         return super.toString();
     }
+
 }

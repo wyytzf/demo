@@ -19,8 +19,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean addOrder(Orders order) {
-        Orders save = orderRepository.save(order);
+    public boolean addOrder(Order order) {
+        Order save = orderRepository.save(order);
         return save != null;
     }
 
@@ -30,28 +30,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean updateOrder(Orders order) {
-        Orders save = orderRepository.save(order);
+    public boolean updateOrder(Order order) {
+        Order save = orderRepository.save(order);
         return save != null;
     }
 
     @Override
-    public Orders getOrder(Long id) {
+    public Order getOrder(Long id) {
         return orderRepository.getOne(id);
     }
 
     @Override
-    public List<Orders> getListByUser(Long uid) {
+    public List<Order> getListByUser(Long uid) {
         return orderRepository.findOrdersByUserId(uid);
     }
 
     @Override
-    public List<Orders> getListByStatus(int status) {
+    public List<Order> getListByStatus(int status) {
         return orderRepository.findOrdersByStatus(status);
     }
 
     @Override
-    public Page<Orders> getListByUser(Long id, Pageable pageable) {
+    public Page<Order> getListByUser(Long id, Pageable pageable) {
         return orderRepository.findAll(pageable);
     }
 }
