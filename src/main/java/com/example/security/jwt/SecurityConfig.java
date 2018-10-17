@@ -31,24 +31,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf()
-                .disable()
-                .authorizeRequests()
-//                .antMatchers("/orders").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/error").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(this.authenticationManager());
-        http.addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class);
+//        http
+//                .csrf()
+//                .disable()
+//                .authorizeRequests()
+////                .antMatchers("/orders").permitAll()
+//                .antMatchers("/login").permitAll()
+//                .antMatchers("/error").permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(unauthorizedHandler)
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests().anyRequest().permitAll();
+//        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(this.authenticationManager());
+//        http.addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class);
 //        http.addFilterAfter(filter,FilterSecurityInterceptor.class);
 
     }
