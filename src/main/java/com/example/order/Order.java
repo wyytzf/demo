@@ -3,6 +3,7 @@ package com.example.order;
 
 import com.example.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "orders")
+@Data
 public class Order implements Serializable {
     private static final long serialVersionUID = 4L;
     @Id
@@ -29,72 +31,5 @@ public class Order implements Serializable {
     /* 订单状态 0-出库中，1-配送中，2-已签收,3-已拒收,4-申请退款中，5-申请退货中,6-完成 */
     private short status;
 
-//    @OneToMany
-//    @JoinColumn(nullable = false, name = "oid")
-//    private List<OrderItem> list;
-
-    public Order() {
-
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public BigDecimal getPayment() {
-        return payment;
-    }
-
-    public BigDecimal getPost_fee() {
-        return post_fee;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public short getStutas() {
-        return status;
-    }
-
-//    public List<OrderItem> getList() {
-//        return list;
-//    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setPayment(BigDecimal payment) {
-        this.payment = payment;
-    }
-
-    public void setPost_fee(BigDecimal post_fee) {
-        this.post_fee = post_fee;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setStutas(short stutas) {
-        this.status = stutas;
-    }
-
-//    public void setList(List<OrderItem> list) {
-//        this.list = list;
-//    }
 }
 

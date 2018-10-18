@@ -1,10 +1,13 @@
 package com.example.goods;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
+@Data
 public class Goods implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -23,60 +26,4 @@ public class Goods implements Serializable {
     @JoinColumn(nullable = false, name = "category_id")
     /* 商品类别*/
     private GoodsCategory goodsCategory;
-
-    public Goods() {
-
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public String getIntroduce() {
-        return introduce;
-    }
-
-    public GoodsCategory getGoodsCategory() {
-        return goodsCategory;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
-    }
-
-    public void setGoodsCategory(GoodsCategory goodsCategory) {
-        this.goodsCategory = goodsCategory;
-    }
 }
